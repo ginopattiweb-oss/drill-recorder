@@ -1,0 +1,35 @@
+{
+  "name": "boom-plantilla",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "node scripts/setup.mjs",
+    "dev": "next dev -p 3030",
+    "build": "next build",
+    "start": "next start -p 3030",
+    "lint": "eslint",
+    "setup": "node scripts/setup.mjs",
+    "doctor": "node scripts/setup.mjs --doctor"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "lucide-react": "^1.59.0",
+    "nanoid": "^5.1.16",
+    "next": "15.5.28",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.28",
+    "typescript": "^5"
+  },
+  "description": "Boom: clon de Loom para grabar pantalla + cámara y compartir por link. Funciona en localhost sin claves.",
+  "engines": {
+    "node": ">=20"
+  }
+}
