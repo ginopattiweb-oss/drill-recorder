@@ -15,6 +15,7 @@ type Phase = "closed" | "setup" | "countdown" | "recording" | "paused" | "upload
 
 const PART_SIZE = 45 * 1024 * 1024;
 const BUBBLE_SIZES = [140, 220, 320];
+const COUNTDOWN_SECONDS = 3;
 
 const RecorderCtx = createContext<{ open: () => void }>({ open: () => {} });
 export const useRecorder = () => useContext(RecorderCtx);
@@ -514,8 +515,8 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
 
   const runCountdown = useCallback(() => {
     setPhase("countdown");
-    setCount(3);
-    let n = 3;
+    setCount(COUNTDOWN_SECONDS);
+    let n = COUNTDOWN_SECONDS;
     if (countdownRef.current) clearInterval(countdownRef.current);
     countdownRef.current = setInterval(() => {
       n -= 1;
@@ -949,17 +950,24 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
 
       {phase === "countdown" && (
         <div className="countdown">
-          <div className="countdown-stack">
-            <div className="countdown-circle">
-              <svg width="180" height="180" viewBox="0 0 180 180">
-                <circle cx="90" cy="90" r="85" />
-              </svg>
-              <span key={count} className="countdown-num">
-                {count}
+          <div className="countdown-card">
+            <div className="countdown-heading">
+              <LogoMark size={22} />
+              <span>Grabación en</span>
+            </div>
+            <div className="countdown-readout" role="timer" aria-label={`${count} segundos para grabar`}>
+              <span key={count} className="countdown-num" aria-hidden="true">
+                {String(count).padStart(2, "0")}
               </span>
             </div>
-            <button className="countdown-skip" onClick={skipCountdown}>
-              Saltar
+            <div className="countdown-progress" aria-hidden="true">
+              {Array.from({ length: COUNTDOWN_SECONDS }, (_, index) => {
+                const second = COUNTDOWN_SECONDS - index;
+                return <span key={second} data-state={count < second ? "done" : count === second ? "active" : "waiting"} />;
+              })}
+            </div>
+            <button type="button" className="countdown-skip" onClick={skipCountdown}>
+              Grabar ahora
             </button>
           </div>
         </div>
@@ -998,11 +1006,11 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
               <div className="pip-bubble">
                 <CamVideo stream={camStream} />
                 {phase === "countdown" && (
-                  <div className="pip-count" onClick={skipCountdown}>
+                  <button type="button" className="pip-count" aria-label="Grabar ahora" onClick={skipCountdown}>
                     <span key={count} className="countdown-num">
-                      {count}
+                      {String(count).padStart(2, "0")}
                     </span>
-                  </div>
+                  </button>
                 )}
               </div>
             )}

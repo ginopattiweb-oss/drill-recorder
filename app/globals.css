@@ -217,25 +217,56 @@ textarea {
   transform: scale(1.05);
 }
 
-/* ---------- app shell (librería) ---------- */
-.shell {
-  display: grid;
-  grid-template-columns: 248px 1fr;
-  min-height: 100vh;
+/* ---------- navegación de la biblioteca ---------- */
+.library-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.library-menu-toggle {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.library-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  margin: 0;
+  padding: 0;
+  width: min(304px, 88vw);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  border: 0;
+  border-right: 1px solid var(--border);
+  color: var(--body);
+  background: var(--bg-secondary);
+}
+.library-drawer[open] {
+  animation: drawer-in 0.22s var(--ease-out) both;
+}
+.library-drawer::backdrop {
+  background: rgb(5 10 7 / 60%);
+  backdrop-filter: blur(3px);
+}
+@keyframes drawer-in {
+  from { transform: translateX(-100%); }
 }
 .sidebar {
-  border-right: 1px solid var(--border);
-  background: var(--bg-secondary);
-  padding: 18px 12px;
+  min-height: 100%;
+  padding: 18px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  gap: 12px;
 }
-.sidebar .logo {
-  padding: 2px 8px 18px;
+.library-drawer-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.library-drawer-heading .logo {
+  font-size: 19px;
 }
 .workspace {
   display: flex;
@@ -288,14 +319,6 @@ textarea {
   background: var(--highlight);
   color: var(--primary-strong);
   font-weight: 650;
-}
-.nav-section {
-  font-size: 12px;
-  font-weight: 650;
-  color: var(--grey5);
-  padding: 16px 10px 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
 }
 .sidebar-foot {
   margin-top: auto;
@@ -1666,89 +1689,78 @@ kbd {
   z-index: 1100;
   display: grid;
   place-items: center;
-  background: hsla(228, 10%, 8%, 0.45);
-  backdrop-filter: blur(2px);
+  padding: 16px;
+  background: rgb(5 10 7 / 66%);
+  backdrop-filter: blur(6px);
   animation: fade-in 0.2s ease both;
 }
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
+  from { opacity: 0; }
 }
-.countdown-circle {
-  position: relative;
+.countdown-card {
   display: grid;
-  place-items: center;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: hsla(228, 6%, 12%, 0.85);
-  color: #fff;
-  font-size: 88px;
+  justify-items: center;
+  gap: 16px;
+  width: min(100%, 296px);
+  padding: 24px;
+  border: 1px solid rgb(70 237 146 / 34%);
+  border-radius: var(--radius-300);
+  background: radial-gradient(ellipse at 50% 35%, #173825, transparent 72%), var(--bg);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 42%);
+}
+.countdown-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--grey7);
+  font-weight: 650;
+}
+.countdown-readout {
+  color: var(--primary-strong);
+  font-size: clamp(64px, 16vw, 96px);
   font-weight: 800;
-  box-shadow: 0 20px 60px hsla(0, 0%, 0%, 0.4);
-}
-.countdown-circle svg {
-  position: absolute;
-  inset: 0;
-  transform: rotate(-90deg);
-}
-.countdown-circle circle {
-  fill: none;
-  stroke: var(--primary);
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-dasharray: 534;
-  animation: ring 1s linear infinite;
-}
-@keyframes ring {
-  from {
-    stroke-dashoffset: 534;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.06em;
 }
 .countdown-num {
-  animation: num-pop 1s var(--ease-out) infinite;
+  display: inline-block;
+  animation: countdown-enter 0.24s var(--ease-out) both;
 }
-@keyframes num-pop {
-  0% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
-  20% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.85);
-    opacity: 0;
-  }
+@keyframes countdown-enter {
+  from { opacity: 0; transform: translateY(8px); }
 }
-.countdown-stack {
+.countdown-progress {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
+  gap: 5px;
+  width: 100%;
+}
+.countdown-progress span {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--primary-medium);
+}
+.countdown-progress span[data-state="done"] {
+  background: var(--primary);
+}
+.countdown-progress span[data-state="active"] {
+  background: linear-gradient(var(--primary), var(--primary)) left / 0 100% no-repeat var(--primary-medium);
+  animation: countdown-fill 1s linear both;
+}
+@keyframes countdown-fill {
+  to { background-size: 100% 100%; }
 }
 .countdown-skip {
-  color: #fff;
-  font-weight: 600;
-  padding: 10px 22px;
-  border-radius: 99px;
-  background: hsla(0, 0%, 100%, 0.16);
-  backdrop-filter: blur(6px);
-  transition: background 0.15s ease, transform 0.15s var(--ease-out);
+  width: 100%;
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-100);
+  color: var(--body);
+  font-weight: 650;
 }
 .countdown-skip:hover {
-  background: hsla(0, 0%, 100%, 0.28);
-}
-.countdown-skip:active {
-  transform: scale(0.96);
+  background: var(--bg-hover);
 }
 
 /* subida */
@@ -1905,9 +1917,11 @@ kbd {
   inset: 0;
   display: grid;
   place-items: center;
-  background: hsla(0, 0%, 0%, 0.55);
-  font-size: 72px;
+  background: rgb(5 10 7 / 72%);
+  color: var(--primary-strong);
+  font-size: clamp(30px, 28vh, 72px);
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 .pip-status {
   flex: 1;
@@ -1938,12 +1952,6 @@ kbd {
 }
 
 @media (max-width: 1000px) {
-  .shell {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    display: none;
-  }
   .share-layout {
     grid-template-columns: 1fr;
   }
@@ -1973,9 +1981,6 @@ kbd {
 .logo-name strong { font-weight: 850; letter-spacing: 0.02em; }
 .logo-name span { color: var(--grey6); font-weight: 550; }
 
-.library-mobile-nav {
-  display: none;
-}
 .recorder-settings {
   max-width: 620px;
 }
@@ -2018,16 +2023,4 @@ kbd {
   margin: 0;
   color: var(--grey6);
   text-align: right;
-}
-@media (max-width: 1000px) {
-  .library-mobile-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  .library-mobile-nav [aria-current="page"] {
-    color: var(--primary-strong);
-    font-weight: 650;
-  }
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { Eye, Library as LibraryIcon, Play, Search, Settings } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Eye, Library as LibraryIcon, Menu, Play, Search, Settings, X } from "lucide-react";
 import { Logo, LogoMark } from "./Logo";
 import { RecordButton } from "./RecordButton";
 import { formatTime, initials, timeAgo } from "@/lib/format";
@@ -34,44 +34,66 @@ export function Library({
   passwordEnabled: boolean;
 }) {
   const [q, setQ] = useState("");
+  const drawer = useRef<HTMLDialogElement>(null);
+  const closeMenu = () => drawer.current?.close();
   const list = useMemo(() => videos.filter((v) => v.title.toLowerCase().includes(q.toLowerCase())), [videos, q]);
 
   return (
-    <div className="shell">
-      <aside className="sidebar">
-        <Link href="/">
-          <Logo size={30} />
-        </Link>
-        <div className="workspace">
-          <span className="avatar avatar-square">{initials(OWNER_NAME)}</span>
-          <div style={{ lineHeight: 1.3 }}>
-            <div style={{ fontWeight: 650 }}>{OWNER_NAME}</div>
-            <div style={{ fontSize: 12, color: "var(--grey6)" }}>Workspace personal</div>
+    <div>
+      <dialog
+        ref={drawer}
+        id="library-navigation"
+        className="library-drawer"
+        aria-label="Menú de DRILL Recorder"
+        onClick={(event) => {
+          if (event.target === event.currentTarget) closeMenu();
+        }}
+      >
+        <aside className="sidebar">
+          <div className="library-drawer-heading">
+            <Link href="/" onClick={closeMenu}><Logo size={28} /></Link>
+            <button type="button" className="icon-btn" aria-label="Cerrar menú" onClick={closeMenu}><X size={19} /></button>
           </div>
-        </div>
-        <nav aria-label="Navegación principal">
-          <Link href="/" className={`nav-item${settings ? "" : " active"}`} aria-current={settings ? undefined : "page"}>
-            <LibraryIcon size={18} /> Mi biblioteca
-          </Link>
-          <Link href="/?vista=configuracion" className={`nav-item${settings ? " active" : ""}`} aria-current={settings ? "page" : undefined}>
-            <Settings size={18} /> Configuración
-          </Link>
-        </nav>
-        <div className="sidebar-foot">
-          <div style={{ display: "flex", gap: 8, alignItems: "center", color: "var(--body)", fontWeight: 650, marginBottom: 4 }}>
-            <LogoMark size={18} /> Grabaciones ilimitadas
+          <div className="workspace">
+            <span className="avatar avatar-square">{initials(OWNER_NAME)}</span>
+            <div style={{ lineHeight: 1.3 }}>
+              <div style={{ fontWeight: 650 }}>{OWNER_NAME}</div>
+              <div style={{ fontSize: 12, color: "var(--grey6)" }}>Workspace personal</div>
+            </div>
           </div>
-          {storage === "supabase"
-            ? "Grabaciones sin límite de duración, guardadas en tu Supabase."
-            : "Grabaciones sin límite de duración, guardadas en tu computadora (carpeta .data)."}
-        </div>
-      </aside>
+          <nav aria-label="Navegación principal">
+            <Link href="/" onClick={closeMenu} className={`nav-item${settings ? "" : " active"}`} aria-current={settings ? undefined : "page"}>
+              <LibraryIcon size={18} /> Mi biblioteca
+            </Link>
+            <Link href="/?vista=configuracion" onClick={closeMenu} className={`nav-item${settings ? " active" : ""}`} aria-current={settings ? "page" : undefined}>
+              <Settings size={18} /> Configuración
+            </Link>
+          </nav>
+          <div className="sidebar-foot">
+            <div style={{ display: "flex", gap: 8, alignItems: "center", color: "var(--body)", fontWeight: 650, marginBottom: 4 }}>
+              <LogoMark size={18} /> Grabaciones ilimitadas
+            </div>
+            {storage === "supabase"
+              ? "Grabaciones sin límite de duración, guardadas en tu Supabase."
+              : "Grabaciones sin límite de duración, guardadas en tu computadora (carpeta .data)."}
+          </div>
+        </aside>
+      </dialog>
 
       <main className="main">
-        <nav className="library-mobile-nav" aria-label="Navegación principal">
-          <Link href="/" aria-current={settings ? undefined : "page"}>Mi biblioteca</Link>
-          <Link href="/?vista=configuracion" aria-current={settings ? "page" : undefined}>Configuración</Link>
-        </nav>
+        <header className="library-header">
+          <button
+            type="button"
+            className="icon-btn library-menu-toggle"
+            aria-label="Abrir menú"
+            aria-haspopup="dialog"
+            aria-controls="library-navigation"
+            onClick={() => drawer.current?.showModal()}
+          >
+            <Menu size={21} />
+          </button>
+          <Link href="/"><Logo size={28} /></Link>
+        </header>
         {settings ? <RecorderSettings storage={storage} aiEnabled={aiEnabled} passwordEnabled={passwordEnabled} /> : (
           <>
             <div className="topbar">
