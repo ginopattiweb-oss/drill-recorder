@@ -4,8 +4,9 @@ import { store } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
-  const data = await store.listVideos();
+export default async function Home({ searchParams }: { searchParams: Promise<{ vista?: string }> }) {
+  const settings = (await searchParams).vista === "configuracion";
+  const data = settings ? [] : await store.listVideos();
   const videos = data.map((v) => ({
     id: v.id,
     title: v.title,
@@ -16,5 +17,13 @@ export default async function Home() {
     status: v.status,
     thumb: thumbUrl(v),
   }));
-  return <Library videos={videos} storage={store.mode()} aiEnabled={Boolean(process.env.GROQ_API_KEY)} />;
+  return (
+    <Library
+      videos={videos}
+      storage={store.mode()}
+      aiEnabled={Boolean(process.env.GROQ_API_KEY)}
+      passwordEnabled={Boolean(process.env.BOOM_PASSWORD)}
+      settings={settings}
+    />
+  );
 }

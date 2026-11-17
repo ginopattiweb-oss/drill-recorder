@@ -9,7 +9,8 @@ import { formatTime } from "@/lib/format";
 import { canComposite, compositeCamera, type Compositor } from "@/lib/compositor";
 import { bubbleBridge } from "@/lib/bubbleBridge";
 
-type Mode = "screen-cam" | "screen" | "cam";
+import { readRecordingMode, saveRecordingMode, type RecordingMode as Mode } from "@/lib/recordingPreferences";
+
 type Phase = "closed" | "setup" | "countdown" | "recording" | "paused" | "uploading";
 
 const PART_SIZE = 45 * 1024 * 1024;
@@ -357,10 +358,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
 
   const open = useCallback(async () => {
     if (phaseRef.current !== "closed") return;
-    let m: Mode = "screen-cam";
-    try {
-      m = (localStorage.getItem("boom:mode") as Mode) || "screen-cam";
-    } catch {}
+    const m = readRecordingMode();
     setMode(m);
     setError(null);
     setPhase("setup");
@@ -393,9 +391,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
 
   const changeMode = (m: Mode) => {
     setMode(m);
-    try {
-      localStorage.setItem("boom:mode", m);
-    } catch {}
+    saveRecordingMode(m);
     if (m !== "screen" && camOn && !camStreamRef.current) acquireCam(camId);
     if (m === "screen") {
       stopStream(camStreamRef.current);

@@ -1972,3 +1972,62 @@ kbd {
 .logo-name { white-space: nowrap; }
 .logo-name strong { font-weight: 850; letter-spacing: 0.02em; }
 .logo-name span { color: var(--grey6); font-weight: 550; }
+
+.library-mobile-nav {
+  display: none;
+}
+.recorder-settings {
+  max-width: 620px;
+}
+.settings-card {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-150);
+  background: var(--surface);
+}
+.settings-card label,
+.settings-card h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+}
+.settings-card p {
+  margin: 4px 0 12px;
+  color: var(--grey6);
+}
+.settings-card select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-100);
+  background: var(--bg);
+  color: var(--body);
+  font: inherit;
+}
+.settings-card dl {
+  margin: 12px 0 0;
+}
+.settings-card dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+.settings-card dd {
+  margin: 0;
+  color: var(--grey6);
+  text-align: right;
+}
+@media (max-width: 1000px) {
+  .library-mobile-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .library-mobile-nav [aria-current="page"] {
+    color: var(--primary-strong);
+    font-weight: 650;
+  }
+}
