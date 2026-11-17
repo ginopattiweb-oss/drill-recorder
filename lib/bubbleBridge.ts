@@ -1,5 +1,5 @@
-// Puente con la app nativa "Boom Bubble" (burbuja de cámara sin marco, siempre encima).
-// La app escucha un WebSocket en 127.0.0.1:47811 y solo acepta orígenes de Boom.
+// Puente con la app nativa "DRILL Bubble" (burbuja de cámara sin marco, siempre encima).
+// La app escucha un WebSocket en 127.0.0.1:47811 y solo acepta orígenes de DRILL Recorder.
 
 export type BubbleMessage =
   | { type: "hello"; version: number; size?: number }
@@ -49,7 +49,7 @@ class BubbleBridge {
         this.pending = null;
         this.ws = ws;
         try {
-          localStorage.setItem("boom:bubbleApp", "1");
+          localStorage.setItem("drill:bubbleApp", "1");
         } catch {}
         this.emit({ type: "connected" });
         settle(true);
@@ -76,11 +76,11 @@ class BubbleBridge {
     if (await this.connect()) return true;
     let known = false;
     try {
-      known = localStorage.getItem("boom:bubbleApp") === "1";
+      known = localStorage.getItem("drill:bubbleApp") === "1";
     } catch {}
     if (!known) return false;
     const a = document.createElement("a");
-    a.href = "boombubble://open";
+    a.href = "drillbubble://open";
     a.click();
     const until = Date.now() + waitMs;
     while (Date.now() < until) {

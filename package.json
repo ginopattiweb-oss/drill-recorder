@@ -1,5 +1,5 @@
 {
-  "name": "boom-plantilla",
+  "name": "drill-recorder",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -28,7 +28,7 @@
     "eslint-config-next": "15.5.28",
     "typescript": "^5"
   },
-  "description": "Boom: clon de Loom para grabar pantalla + cámara y compartir por link. Funciona en localhost sin claves.",
+  "description": "DRILL Recorder: clon de Loom para grabar pantalla + cámara y compartir por link. Funciona en localhost sin claves.",
   "engines": {
     "node": ">=20"
   }

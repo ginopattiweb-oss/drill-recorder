@@ -6,7 +6,7 @@ export const RECORDING_MODES = {
 
 export type RecordingMode = keyof typeof RECORDING_MODES;
 
-const RECORDING_MODE_KEY = "boom:mode";
+const RECORDING_MODE_KEY = "drill:mode";
 
 export function readRecordingMode(): RecordingMode {
   try {

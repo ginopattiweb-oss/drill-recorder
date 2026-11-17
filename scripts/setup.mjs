@@ -20,17 +20,18 @@ const has = (k) => Boolean(env[k] || process.env[k]);
 
 const major = Number(process.versions.node.split(".")[0]);
 const supabase = has("SUPABASE_URL") && has("SUPABASE_SERVICE_KEY");
+const namespace = env.RECORDER_INSTALLATION_NAMESPACE || process.env.RECORDER_INSTALLATION_NAMESPACE || "drill";
 const rows = [
   [major >= 20, `Node ${process.versions.node}`, "Necesitas Node 20 o superior (nodejs.org)."],
   [true, supabase ? "Almacenamiento: Supabase (producción)" : "Almacenamiento: local (carpeta .data/)", null],
   [has("GROQ_API_KEY"), "IA (transcripción, resumen, capítulos): Groq", "Falta GROQ_API_KEY → agrégala en .env.local (gratis en console.groq.com)."],
-  [has("BOOM_PASSWORD"), "Contraseña del dueño", "Sin BOOM_PASSWORD la biblioteca queda abierta. Está bien en localhost; pónla si despliegas."],
+  [has("RECORDER_PASSWORD") || has(`${namespace.toUpperCase()}_PASSWORD`), "Contraseña del dueño", "Sin RECORDER_PASSWORD la biblioteca queda abierta. Está bien en localhost; pónla si despliegas."],
 ];
 
 if (doctor) {
-  console.log("\nEstado de Boom:\n");
+  console.log("\nEstado de DRILL Recorder:\n");
   for (const [ok, label, hint] of rows) console.log(`${ok ? "✓" : "•"} ${label}${!ok && hint ? `\n    ${hint}` : ""}`);
   console.log("\nAbre http://localhost:3030 con Chrome o Edge (la grabadora necesita permisos de pantalla y cámara).\n");
 } else if (!has("GROQ_API_KEY")) {
-  console.log("ℹ Falta GROQ_API_KEY: Boom funciona, pero sin transcripción/resumen con IA. Ver `npm run doctor`.");
+  console.log("ℹ Falta GROQ_API_KEY: DRILL Recorder funciona, pero sin transcripción/resumen con IA. Ver `npm run doctor`.");
 }

@@ -40,7 +40,7 @@ export default async function SharePage({ params }: Props) {
   if (!video) notFound();
   const isOwner = await isOwnerToken((await cookies()).get(OWNER_COOKIE)?.value);
   const urls = videoUrls(video);
-  const safeTitle = video.title.replace(/[^\p{L}\p{N} _-]+/gu, "").trim().slice(0, 80) || "boom";
+  const safeTitle = video.title.replace(/[^\p{L}\p{N} _-]+/gu, "").trim().slice(0, 80) || "drill-recorder";
   const downloadUrl = video.parts === 1 ? `${urls[0]}?download=${encodeURIComponent(`${safeTitle}.${extFor(video.mime_type)}`)}` : null;
   return (
     <ShareView

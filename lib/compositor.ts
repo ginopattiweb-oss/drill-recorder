@@ -1,6 +1,6 @@
 // Compone la burbuja de cámara sobre la captura de pantalla usando Insertable Streams (Chrome/Edge).
 // Se maneja por promesas de frames (no rAF ni timers), así que sigue funcionando con la pestaña de
-// Boom en segundo plano. La cámara (~30fps constante) marca el ritmo: si la pantalla está quieta,
+// DRILL Recorder en segundo plano. La cámara (~30fps constante) marca el ritmo: si la pantalla está quieta,
 // se reutiliza el último frame de pantalla.
 
 type ProcessorCtor = new (init: { track: MediaStreamTrack }) => { readable: ReadableStream<VideoFrame> };

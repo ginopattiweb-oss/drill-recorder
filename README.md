@@ -23,15 +23,17 @@ Con Claude Code: abre esta carpeta, y Claude lee `CLAUDE.md`, instala, arranca y
 |---|---|
 | Transcripción, resumen y capítulos con IA (gratis) | `GROQ_API_KEY` (console.groq.com) |
 | Compartir en internet | `SUPABASE_URL` + `SUPABASE_SERVICE_KEY` y ejecutar `supabase/schema.sql` |
-| Proteger tu biblioteca | `BOOM_PASSWORD` |
-| Tu nombre en la interfaz | `NEXT_PUBLIC_BOOM_OWNER_NAME` |
+| Proteger tu biblioteca | `RECORDER_PASSWORD` |
+| Tu nombre en la interfaz | `NEXT_PUBLIC_RECORDER_OWNER_NAME` |
 
 Sin `GROQ_API_KEY` verás el aviso "Falta GROQ_API_KEY" y todo lo demás funciona. `npm run doctor` te dice qué está activo.
 
 ## Burbuja de cámara (macOS, opcional)
 
-`bash desktop/BoomBubble/build.sh` instala una app que muestra tu cámara en un círculo siempre visible. En otros sistemas la web usa Picture-in-Picture de Chrome/Edge.
+`bash desktop/DrillBubble/build.sh` instala una app que muestra tu cámara en un círculo siempre visible. En otros sistemas la web usa Picture-in-Picture de Chrome/Edge.
 
 ## Seguridad
 
-Nunca subas `.env.local` ni la carpeta `.data/` (ya están en `.gitignore`). Si lo publicas en internet, usa Supabase y define `BOOM_PASSWORD`.
+Nunca subas `.env.local` ni la carpeta `.data/` (ya están en `.gitignore`). Si lo publicas en internet, usa Supabase y define `RECORDER_PASSWORD`.
+
+En una instalación existente, conservá su namespace de almacenamiento con `RECORDER_INSTALLATION_NAMESPACE` antes de publicar.

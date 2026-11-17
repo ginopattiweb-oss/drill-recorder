@@ -79,7 +79,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
               .sort((a, b) => a.start - b.start);
           }
           const current = await store.getVideo(id);
-          if (meta.title && ["Grabación · ", "Boom · "].some((prefix) => current?.title?.startsWith(prefix))) update.title = meta.title;
+          if (meta.title && current?.title?.startsWith("Grabación · ")) update.title = meta.title;
         } catch {
           // metadata IA es opcional
         }

@@ -1,12 +1,14 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const BUCKET = "boom-videos";
+import { INSTALLATION_NAMESPACE } from "@/lib/deployment";
+
+export const BUCKET = `${INSTALLATION_NAMESPACE}-videos`;
 export const PART_SIZE = 45 * 1024 * 1024; // límite por archivo del plan free de Supabase = 50MB
 
 export type TranscriptSegment = { start: number; end: number; text: string };
 export type Chapter = { start: number; title: string };
 
-export type BoomVideo = {
+export type RecorderVideo = {
   id: string;
   title: string;
   status: "uploading" | "ready" | "error";
@@ -26,7 +28,7 @@ export type BoomVideo = {
   created_at: string;
 };
 
-export type BoomComment = {
+export type RecorderComment = {
   id: string;
   video_id: string;
   author_name: string;
@@ -35,7 +37,7 @@ export type BoomComment = {
   created_at: string;
 };
 
-export type BoomReaction = {
+export type RecorderReaction = {
   id: string;
   video_id: string;
   emoji: string;
@@ -69,10 +71,10 @@ export function publicUrl(path: string) {
     : `/api/files/${path}`;
 }
 
-export function videoUrls(v: Pick<BoomVideo, "id" | "parts" | "mime_type">) {
+export function videoUrls(v: Pick<RecorderVideo, "id" | "parts" | "mime_type">) {
   return Array.from({ length: v.parts }, (_, i) => publicUrl(partPath(v.id, i, v.mime_type)));
 }
 
-export function thumbUrl(v: Pick<BoomVideo, "id" | "has_thumbnail">) {
+export function thumbUrl(v: Pick<RecorderVideo, "id" | "has_thumbnail">) {
   return v.has_thumbnail ? publicUrl(`${v.id}/thumb.jpg`) : null;
 }

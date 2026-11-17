@@ -1,9 +1,11 @@
+import { recorderPassword } from "@/lib/deployment";
 import { NextResponse } from "next/server";
 import { OWNER_COOKIE, ownerToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
   const { password } = await req.json();
-  if (!process.env.BOOM_PASSWORD || password !== process.env.BOOM_PASSWORD) {
+  const expected = recorderPassword();
+  if (!expected || password !== expected) {
     return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
   }
   const res = NextResponse.json({ ok: true });

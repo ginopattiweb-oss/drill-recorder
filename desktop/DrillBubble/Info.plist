@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>CFBundleName</key><string>Boom Bubble</string>
-  <key>CFBundleDisplayName</key><string>Boom Bubble</string>
-  <key>CFBundleIdentifier</key><string>app.boom.bubble</string>
-  <key>CFBundleExecutable</key><string>BoomBubble</string>
+  <key>CFBundleName</key><string>DRILL Bubble</string>
+  <key>CFBundleDisplayName</key><string>DRILL Bubble</string>
+  <key>CFBundleIdentifier</key><string>app.drill.bubble</string>
+  <key>CFBundleExecutable</key><string>DrillBubble</string>
   <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>1.0</string>
@@ -13,12 +13,12 @@
   <key>LSMinimumSystemVersion</key><string>13.0</string>
   <key>LSUIElement</key><true/>
   <key>NSHighResolutionCapable</key><true/>
-  <key>NSCameraUsageDescription</key><string>Boom Bubble muestra tu cámara en una burbuja flotante mientras grabás con Boom.</string>
+  <key>NSCameraUsageDescription</key><string>DRILL Bubble muestra tu cámara en una burbuja flotante mientras grabás con DRILL Recorder.</string>
   <key>CFBundleURLTypes</key>
   <array>
     <dict>
-      <key>CFBundleURLName</key><string>app.boom.bubble</string>
-      <key>CFBundleURLSchemes</key><array><string>boombubble</string></array>
+      <key>CFBundleURLName</key><string>app.drill.bubble</string>
+      <key>CFBundleURLSchemes</key><array><string>drillbubble</string></array>
     </dict>
   </array>
 </dict>

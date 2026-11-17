@@ -1,3 +1,4 @@
+import { recorderPassword } from "@/lib/deployment";
 import { Library } from "@/components/Library";
 import { thumbUrl } from "@/lib/supabase";
 import { store } from "@/lib/store";
@@ -22,7 +23,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ v
       videos={videos}
       storage={store.mode()}
       aiEnabled={Boolean(process.env.GROQ_API_KEY)}
-      passwordEnabled={Boolean(process.env.BOOM_PASSWORD)}
+      passwordEnabled={Boolean(recorderPassword())}
       settings={settings}
     />
   );

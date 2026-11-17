@@ -156,7 +156,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
   const [pipWin, setPipWin] = useState<Window | null>(null);
   const [videoPip, setVideoPip] = useState(false);
   const [floatError, setFloatError] = useState<string | null>(null);
-  const [nativeVisible, setNativeVisible] = useState(false); // burbuja de la app Boom Bubble
+  const [nativeVisible, setNativeVisible] = useState(false); // burbuja de la app DRILL Bubble
   const [nativeConnected, setNativeConnected] = useState(false);
   const [bubbleSize, setBubbleSize] = useState(1);
   const [bubblePos, setBubblePos] = useState<{ x: number; y: number } | null>(null);
@@ -275,7 +275,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
       setFloatError(null);
       return true;
     } catch (e) {
-      console.warn("[boom] video PiP falló", e);
+      console.warn("[drill-recorder] video PiP falló", e);
       return false;
     }
   }, []);
@@ -319,7 +319,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
       setPipWin(w);
       setFloatError(null);
     } catch (e) {
-      console.warn("[boom] Document PiP falló", e);
+      console.warn("[drill-recorder] Document PiP falló", e);
       if (!withCam || !(await openVideoPip())) {
         setFloatError(`No se pudo abrir la burbuja flotante (${(e as Error).name}). Se va a reintentar al empezar a grabar.`);
       }
@@ -363,7 +363,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
     setMode(m);
     setError(null);
     setPhase("setup");
-    // ¿está corriendo Boom Bubble? (localhost responde al instante; la activación del click sigue vigente)
+    // ¿está corriendo DRILL Bubble? (localhost responde al instante; la activación del click sigue vigente)
     const native = await bubbleBridge.connect(500);
     setNativeConnected(native);
     if (!native) {
@@ -687,7 +687,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
   finishRef.current = finish;
   actionsRef.current = { pause, resume, restart, cancel };
 
-  // Boom Bubble: visibilidad, controles y reconexión
+  // DRILL Bubble: visibilidad, controles y reconexión
   useEffect(() => {
     const off = bubbleBridge.on((m) => {
       if (m.type === "connected") {
@@ -766,7 +766,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
 
   /* ---------- burbuja arrastrable (en la página) ---------- */
   const dragRef = useRef<{ dx: number; dy: number } | null>(null);
-  // un solo tamaño para las dos burbujas (la de la página y la de Boom Bubble)
+  // un solo tamaño para las dos burbujas (la de la página y la de DRILL Bubble)
   const pickSize = (i: number) => {
     setBubbleSize(i);
     bubbleBridge.send({ type: "size", index: i });
@@ -894,7 +894,7 @@ export function RecorderProvider({ children }: { children: React.ReactNode }) {
           {mode !== "screen" && (
             <p className="rec-hint" style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <span className="rec-dot" style={{ background: nativeConnected ? "var(--primary)" : "var(--grey4)", animation: nativeConnected ? undefined : "none" }} />
-              {nativeConnected ? "Burbuja de escritorio activa (Boom Bubble)" : "Burbuja en ventana — abrí Boom Bubble para el círculo sin marco"}
+              {nativeConnected ? "Burbuja de escritorio activa (DRILL Bubble)" : "Burbuja en ventana — abrí DRILL Bubble para el círculo sin marco"}
             </p>
           )}
           {mode === "screen-cam" && (

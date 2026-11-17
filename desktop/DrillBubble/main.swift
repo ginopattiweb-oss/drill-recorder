@@ -1,5 +1,5 @@
-// Boom Bubble — burbuja de cámara nativa (sin marco, siempre encima, en todos los escritorios).
-// La web de Boom se conecta por WebSocket a 127.0.0.1:47811 para mostrarla y recibir los controles.
+// DRILL Bubble — burbuja de cámara nativa (sin marco, siempre encima, en todos los escritorios).
+// La web de DRILL Recorder se conecta por WebSocket a 127.0.0.1:47811 para mostrarla y recibir los controles.
 
 import AppKit
 import AVFoundation
@@ -7,8 +7,8 @@ import Network
 import ServiceManagement
 
 let PORT: UInt16 = 47811
-// Orígenes permitidos: tu servidor local y, si despliegas Boom, tu dominio de producción:
-//   defaults write app.boom.bubble extraOrigins -array "https://tu-boom.vercel.app"
+// Orígenes permitidos: tu servidor local y, si despliegas DRILL Recorder, tu dominio de producción:
+//   defaults write app.drill.bubble extraOrigins -array "https://drill-recorder.vercel.app"
 let ALLOWED_ORIGINS: Set<String> = Set([
     "http://localhost:3030",
     "http://127.0.0.1:3030",
@@ -33,7 +33,7 @@ final class BridgeServer {
     func start() {
         let ws = NWProtocolWebSocket.Options()
         ws.autoReplyPing = true
-        // Solo se aceptan páginas de Boom (evita que cualquier sitio prenda la cámara)
+        // Solo se aceptan páginas de DRILL Recorder (evita que cualquier sitio prenda la cámara)
         ws.setClientRequestHandler(.main) { _, headers in
             let origin = headers.first { $0.name.lowercased() == "origin" }?.value ?? ""
             let ok = ALLOWED_ORIGINS.contains(origin)
@@ -47,12 +47,12 @@ final class BridgeServer {
             let l = try NWListener(using: params)
             l.newConnectionHandler = { [weak self] c in self?.accept(c) }
             l.stateUpdateHandler = { state in
-                if case .failed(let e) = state { NSLog("BoomBubble listener failed: \(e)") }
+                if case .failed(let e) = state { NSLog("DrillBubble listener failed: \(e)") }
             }
             l.start(queue: .main)
             listener = l
         } catch {
-            NSLog("BoomBubble: no se pudo abrir el puerto \(PORT): \(error)")
+            NSLog("DrillBubble: no se pudo abrir el puerto \(PORT): \(error)")
         }
     }
 
@@ -375,7 +375,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         server.onMessage = { [weak self] m in self?.handle(m) }
         server.helloExtra = { [weak self] in ["size": self?.sizeIndex ?? 1] }
         server.onCountChange = { [weak self] count in
-            // si se cierra la pestaña de Boom, se apaga la cámara
+            // si se cierra la pestaña de DRILL Recorder, se apaga la cámara
             if count == 0 { self?.hide(notify: false) }
             self?.updateMenu()
         }
@@ -387,7 +387,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func handleURL(_ e: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
-        // boombubble://open → solo hace falta que la app esté corriendo
+        // drillbubble://open → solo hace falta que la app esté corriendo
     }
 
     // MARK: mensajes de la web
@@ -536,7 +536,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func setupStatusItem() {
         status = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let b = status.button {
-            b.image = NSImage(systemSymbolName: "circle.circle.fill", accessibilityDescription: "Boom Bubble")
+            b.image = NSImage(systemSymbolName: "circle.circle.fill", accessibilityDescription: "DRILL Bubble")
             b.image?.isTemplate = true
         }
         updateMenu()
@@ -544,7 +544,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func updateMenu() {
         let m = NSMenu()
-        let title = NSMenuItem(title: server.count > 0 ? "Boom conectado" : "Esperando a Boom…", action: nil, keyEquivalent: "")
+        let title = NSMenuItem(title: server.count > 0 ? "DRILL Recorder conectado" : "Esperando a DRILL Recorder…", action: nil, keyEquivalent: "")
         title.isEnabled = false
         m.addItem(title)
         m.addItem(.separator())
@@ -555,7 +555,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             m.addItem(it.copy() as! NSMenuItem)
         }
         m.addItem(.separator())
-        let quit = NSMenuItem(title: "Salir de Boom Bubble", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        let quit = NSMenuItem(title: "Salir de DRILL Bubble", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         m.addItem(quit)
         status?.menu = m
     }

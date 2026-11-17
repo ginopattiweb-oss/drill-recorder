@@ -17,7 +17,7 @@ import { Logo } from "./Logo";
 import { Player, type PlayerHandle } from "./Player";
 import { RecordFab, RecordButton } from "./RecordButton";
 import { formatTime, initials, timeAgo } from "@/lib/format";
-import type { BoomComment, BoomReaction, BoomVideo } from "@/lib/supabase";
+import type { RecorderComment, RecorderReaction, RecorderVideo } from "@/lib/supabase";
 
 const QUICK = ["❤️", "👍", "🔥", "👏", "🙌", "👀"];
 const MORE = [
@@ -40,9 +40,9 @@ const MORE = [
 ];
 
 export function ShareView(props: {
-  video: BoomVideo;
-  comments: BoomComment[];
-  reactions: BoomReaction[];
+  video: RecorderVideo;
+  comments: RecorderComment[];
+  reactions: RecorderReaction[];
   urls: string[];
   poster: string | null;
   downloadUrl: string | null;
@@ -95,9 +95,9 @@ export function ShareView(props: {
   // vista + toast de "nuevo video"
   useEffect(() => {
     try {
-      setName(localStorage.getItem("boom:name") || "");
+      setName(localStorage.getItem("drill:name") || "");
     } catch {}
-    const key = `boom:viewed:${video.id}`;
+    const key = `drill:viewed:${video.id}`;
     let seen = false;
     try {
       seen = !!sessionStorage.getItem(key);
@@ -169,7 +169,7 @@ export function ShareView(props: {
       ]);
       setTimeout(() => setFloats((f) => f.filter((x) => x.id !== id)), 1700);
       setPopKey(emoji + id);
-      const temp: BoomReaction = {
+      const temp: RecorderReaction = {
         id: `tmp-${id}`,
         video_id: video.id,
         emoji,
@@ -234,7 +234,7 @@ export function ShareView(props: {
       }),
     });
     if (r.ok) {
-      const saved = (await r.json()) as BoomComment;
+      const saved = (await r.json()) as RecorderComment;
       setComments((c) => [...c, saved]);
     }
   };
@@ -527,7 +527,7 @@ export function ShareView(props: {
                       if (!n) return;
                       setName(n);
                       try {
-                        localStorage.setItem("boom:name", n);
+                        localStorage.setItem("drill:name", n);
                       } catch {}
                       setTimeout(() => composerRef.current?.focus(), 30);
                     }}
